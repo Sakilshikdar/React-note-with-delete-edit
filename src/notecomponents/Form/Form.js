@@ -9,25 +9,35 @@ const Form = ({ title, settitle, desc, setDesc, notes, setNotes }) => {
   }
 
   const inputHandler = (e) => {
-    if ('') {
-      settitle(e.target.value)
+    const { name, value } = e.target;
+    if (name === 'title') {
+      settitle(value)
+    } else {
+      setDesc(value)
     }
-    else {
-      setDesc(e.target.value)
-    }
+    // if ('') {
+    //   settitle(e.target.value)
+    // }
+    // else {
+    //   setDesc(e.target.value)
+    // }
   }
 
   const addNotesHandler = (e) => {
     e.preventDefault();
-    setNotes((note) => {
-      return (
-        [...note, {
-          title: title,
-          desc: desc,
-          id: new Date().getTime()
-        }]
-      )
-    })
+    if (title !== '' && desc !== '') {
+      setNotes((note) => {
+        return (
+          [...note, {
+            title: title,
+            desc: desc,
+            id: new Date().getTime()
+          }]
+        )
+      })
+    }
+    setDesc('')
+    settitle('')
   }
 
   return (
@@ -42,9 +52,9 @@ const Form = ({ title, settitle, desc, setDesc, notes, setNotes }) => {
             variant='standard'
             onChange={inputHandler}
             id={title}
-            name='title' 
-            
-            />
+            name='title'
+            value={title}
+          />
         }
         <textarea
           className='border-none mb-3 hover:border-none'
@@ -52,8 +62,8 @@ const Form = ({ title, settitle, desc, setDesc, notes, setNotes }) => {
           variant='standard'
           onClick={onTextAreaClick}
           onChange={inputHandler}
-          id={desc}
           name='desc'
+          value={desc}
         ></textarea>
         <div>
           <button onClick={addNotesHandler}>add</button>
